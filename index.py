@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
+import os
 import re
+import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -51,3 +53,23 @@ def sessions_has_key() -> bool:
         True if EasyData API key is already verified for the current session, False otherwise.
     """
     return 'easy_data_key' in globals()
+
+def get_easy_data_key() -> None:
+    """
+    Print the EasyData API key if entered for the current session.
+
+    Returns
+    -------
+    None
+        If EasyData API key is entered, print the key.
+    ValueError
+        If no EasyData API key has been entered for the current session.
+    """
+    if 'easy_data_key' in globals():
+        print(f"EasyData API key for the current session: {easy_data_key}")
+    else:
+        raise ValueError("No EasyData API key entered for the current session.")
+
+# Example usage
+
+#get_easydata_key()
