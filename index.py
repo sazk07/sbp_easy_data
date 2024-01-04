@@ -2,6 +2,7 @@
 
 import os
 import re
+import json
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -123,18 +124,20 @@ def download_series(series_id, start_date, end_date, format="csv"):
         current_directory = os.getcwd()
 
         # Construct the file path for the CSV file in the current directory
-        csv_file_path = os.path.join(
+        write_file_path = os.path.join(
             current_directory, f"{series_id}_{start_date}_{end_date}.{format}"
         )
 
         # Write the downloaded content to the CSV file
-        with open(csv_file_path, "w", encoding="utf-8") as csv_file:
-            csv_file.write(response.text)
+        with open(write_file_path, "w", encoding="utf-8") as write_file:
+            write_file.write(response.text)
+        print(f"data saved to {write_file_path}")
 
-        print(f"CSV data saved to {csv_file_path}")
-
-        # Load CSV as DataFrame
-        data_frame = pd.read_csv(csv_file_path)
+        # Load to as DataFrame
+        if format == "csv":
+            data_frame = pd.read_csv(write_file_path)
+        else:
+            data_frame = pd.read_json(write_file_path)
 
         return data_frame
 
