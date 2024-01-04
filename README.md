@@ -33,6 +33,12 @@ get_Easydata_key()
 data_frame = download_series("TS_GP_IR_REPOMR_D.ORR", "2015-05-25" ,"2023-12-20", "csv")
 ```
 
+or
+
+```py
+data_frame = download_series("TS_GP_IR_REPOMR_D.ORR", "2015-05-25" ,"2023-12-20", "json")
+```
+
 ## Tranforming output of download_series function, that is object called data_frame into a usable time-series
 
 ```py
