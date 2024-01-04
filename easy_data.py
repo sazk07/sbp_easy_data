@@ -2,7 +2,6 @@
 
 import os
 import re
-import json
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -150,3 +149,90 @@ def download_series(series_id, start_date, end_date, format="csv"):
 # Example usage
 
 # data_frame = download_series("series_id", "start_date" ,"end_date", format)
+
+
+def build_time_series(data_frame):
+    """
+    Build a time-series DataFrame by setting the index to 'Observation Date'.
+
+    Parameters
+    ----------
+    dataFrame : pandas.DataFrame
+        Input DataFrame containing columns including 'Observation Date' and 'Observation Value'.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Time-series DataFrame with the index set to 'Observation Date'.
+
+    Notes
+    -----
+    This function modifies the input DataFrame in-place.
+
+    """
+    # Keep only the 'Observation Date' and 'Observation Value' columns
+    columns_diff = data_frame.columns.difference(
+        ["Observation Date", "Observation Value"], 1, inplace=True
+    )
+    data_frame.drop(columns_diff)
+    # Convert 'Observation Date' to datetime and set it as the index
+    data_frame["Observation Date"] = pd.to_datetime(data_frame["Observation Date"])
+    data_frame = data_frame.set_index("Observation Date")
+    return data_frame
+
+
+# Example Usage
+
+# build_time_series(data_frame)
+
+
+def plot_time_series(data_frame):
+    """
+    Plot a time-series using Plotly Express.
+
+    Parameters
+    ----------
+    dataFrame : pandas.DataFrame
+        Input DataFrame containing columns 'Observation Date' and 'Observation Value'.
+
+    Returns
+    -------
+    None
+        Displays the interactive time-series plot using Plotly Express.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> data = {'Observation Date': ['2023-01-01', '2023-01-02'],
+    ...         'Observation Value': [10, 15]}
+    >>> df = pd.DataFrame(data)
+    >>> plot_time_series(df)
+    """
+    # Plotting
+    plt.figure(figsize=(10, 6))
+    plt.plot(
+        data_frame["Observation Date"],
+        data_frame["Observation Value"],
+        color="blue",
+        linestyle="-",
+        linewidth=2,
+        markersize=8,
+    )
+
+    # Styling
+    plt.title("Time-Series Graph", fontsize=16)
+    plt.xlabel("Date", fontsize=14)
+    plt.ylabel("Observation Value", fontsize=14)
+    plt.grid(True, linestyle="--", alpha=0.7)
+
+    # Set a gray background
+    plt.gca().set_facecolor("#F0F0F0")  # Adjust the color code as needed
+
+    # Show the plot
+    plt.show()
+
+
+# Example Usage
+
+# Pass the dataFrame downloaded through build_time_series function into this function:
+# plot_time_series(data_frame)
